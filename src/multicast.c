@@ -11,7 +11,7 @@
 
 void join_mcast(int fd, struct sockaddr_in *sin) {
 #ifdef	IP_ADD_MEMBERSHIP       /* only include if host supports mcasting */
-    u_long inaddr;
+    uint32_t inaddr;
     struct ip_mreq mreq;
 
     inaddr = sin->sin_addr.s_addr;

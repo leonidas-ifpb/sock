@@ -57,18 +57,18 @@ void sroute_doopt(int strict, char *argptr) {
     }
 
     if (inet_aton(argptr, &inaddr) == 1) {
-        bcopy(&inaddr, optr, sizeof(u_long));   /* dotted decimal */
+        bcopy(&inaddr, optr, sizeof(uint32_t));   /* dotted decimal */
         if (verbose)
             fprintf(stderr, "source route to %s\n", inet_ntoa(inaddr));
     } else if ((hp = gethostbyname(argptr)) != NULL) {
-        bcopy(hp->h_addr, optr, sizeof(u_long));    /* hostname */
+        bcopy(hp->h_addr, optr, sizeof(uint32_t));    /* hostname */
         if (verbose)
             fprintf(stderr, "source route to %s\n",
                     inet_ntoa(*((struct in_addr *) hp->h_addr)));
     } else
         err_quit("unknown host: %s\n", argptr);
 
-    optr += sizeof(u_long);     /* for next IP addr in list */
+    optr += sizeof(uint32_t);     /* for next IP addr in list */
     sroute_cnt++;
 }
 
@@ -83,8 +83,8 @@ void sroute_set(int sockfd) {
     sroute_opt[1] = 3 + (sroute_cnt * 4);   /* total length, incl. destination */
 
     /* destination must be stored as final entry */
-    bcopy(&servaddr.sin_addr, optr, sizeof(u_long));
-    optr += sizeof(u_long);
+    bcopy(&servaddr.sin_addr, optr, sizeof(uint32_t));
+    optr += sizeof(uint32_t);
     if (verbose) {
         fprintf(stderr, "source route to %s\n", inet_ntoa(servaddr.sin_addr));
         fprintf(stderr, "source route size %d bytes\n", sroute_opt[1]);
